@@ -8,7 +8,11 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
+<<<<<<< HEAD
 set VIRTUAL_ENV=C:\Users\usuario\github-classroom\ICV-23-24\proyecto-criptografia-python-grupo-5\.venv
+=======
+set VIRTUAL_ENV=C:\Users\USER\github-classroom\ICV-23-24\proyecto-criptografia-python-grupo-5\.venv
+>>>>>>> 3f97371b75116115ff79a29d2268b99d776a7030
 
 if not defined PROMPT set PROMPT=$P$G
 
