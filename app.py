@@ -1,9 +1,25 @@
+from contextlib import _RedirectStream, redirect_stderr
+from curses import flash
+import os
 from datetime import datetime
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 import functions as f
+from werkzeug.utils import secure_filename
+
+
+UPLOAD_FOLDER = './uploads/'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = "super secret key"
+def allowed_file(filename):
+    # Verifica y crea el directorio de carga si no existe
+    # if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    # os.makedirs(app.config['UPLOAD_FOLDER'])
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
 
 # Replace the existing home function with the one below
 @app.route("/")
@@ -25,6 +41,28 @@ def csimetrico():
             return render_template('csimetrico.html', decrypted_message=decrypted_message, mode=mode)
 
     return render_template("csimetrico.html")
+
+# @app.route("/testingAsim", methods=['GET', 'POST'])
+# def testingAsim():
+#     if request.method == 'POST':
+#         # Revisa si no se ha seleccionado ningún archivo
+#         if 'file' not in request.files:
+#             flash('No file part')
+#             return redirect_stderr(request.url)
+#         file = request.files['file']
+#         # Guarda el archivo en caso de que sea válido
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#                 #return _RedirectStream(url_for('download_file', name=filename))
+#     return render_template("testingAsim.html")
+
+# registro para guardarlo en un fichero con la ruta a una carpeta en local.
+@app.route("/download/<filename>")
+def download_file(filename):
+    with app.app_context():
+        print(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment= True );
 
 @app.route("/casimetrico/")
 def casimetrico():
