@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import Flask, render_template, request
+from flask import Flask, flash, jsonify, redirect, render_template, request, send_from_directory
 import functions as f
 from werkzeug.utils import secure_filename
 
@@ -84,3 +84,18 @@ def hello_there(name = None):
 @app.route("/api/data")
 def get_data():
     return app.send_static_file("data.json")
+
+@app.route("/listar/")
+def listar():
+    return os.listdir(UPLOAD_FOLDER)
+    # files = []
+    # for filename in os.listdir(UPLOAD_FOLDER):
+    #     path = os.path.join(UPLOAD_FOLDER, filename)
+    #     if os.path.isfile(path):
+    #         files.append(filename)
+    # return jsonify(files)
+
+@app.route("/listar/<path:path>")
+def get_file(path):
+    """Download a file."""
+    return send_from_directory(UPLOAD_FOLDER, path, as_attachment=True)
