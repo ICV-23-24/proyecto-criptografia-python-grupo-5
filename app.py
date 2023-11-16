@@ -88,12 +88,6 @@ def get_data():
 @app.route("/listar/")
 def listar():
     return os.listdir(UPLOAD_FOLDER)
-    # files = []
-    # for filename in os.listdir(UPLOAD_FOLDER):
-    #     path = os.path.join(UPLOAD_FOLDER, filename)
-    #     if os.path.isfile(path):
-    #         files.append(filename)
-    # return jsonify(files)
 
 @app.route("/listar/<path:path>")
 def get_file(path):
