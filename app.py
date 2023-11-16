@@ -1,8 +1,11 @@
 import os
 from datetime import datetime
-from flask import Flask, flash, jsonify, redirect, render_template, request, send_from_directory
+from flask import Flask, flash, redirect, render_template, request, send_from_directory
 import functions as f
 from werkzeug.utils import secure_filename
+from Crypto.Cipher import PKCS1_OAEP
+from Crypto.PublicKey import RSA
+from binascii import hexlify
 
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -38,9 +41,28 @@ def csimetrico():
 
 @app.route("/testingAsim", methods=['GET', 'POST'])
 def testingAsim():
+    # if request.method == 'POST':
+    #     # Revisa si no se ha seleccionado ningún archivo
+    #     if 'file' not in request.files:
+    #         flash('No file part')
+    #         return redirect(request.url)
+    #     file = request.files['file']
+    #     # Guarda el archivo en caso de que sea válido
+    #     if file and allowed_file(file.filename):
+    #         filename = secure_filename(file.filename)
+    #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #         # return redirect(url_for('download_file', name=filename))
+
     if request.method == 'POST':
+        mode = request.form['mode']
+        if mode == 'generate':
+            #Generating private key (RsaKey object) of key length of 1024 bits
+            private_key = RSA.generate(1024)
+            #Generating the public key (RsaKey object) from the private key
+            public_key = private_key.publickey()
+            return render_template('testingAsim.html',private_key=private_key,public_key=public_key,mode=mode)
         # Revisa si no se ha seleccionado ningún archivo
-        if 'file' not in request.files:
+        elif 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
         file = request.files['file']
@@ -49,6 +71,9 @@ def testingAsim():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # return redirect(url_for('download_file', name=filename))
+
+    # return render_template("csimetrico.html")
+
 
     return render_template("testingAsim.html")
 
