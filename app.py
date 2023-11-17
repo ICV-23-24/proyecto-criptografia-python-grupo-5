@@ -62,15 +62,16 @@ def testingAsim():
             public_key = private_key.publickey()
             return render_template('testingAsim.html',private_key=private_key,public_key=public_key,mode=mode)
         # Revisa si no se ha seleccionado ningún archivo
-        elif 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # Guarda el archivo en caso de que sea válido
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # return redirect(url_for('download_file', name=filename))
+        if mode == 'upload':
+            file = request.files['file']
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            # Guarda el archivo en caso de que sea válido
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                # return redirect(url_for('download_file', name=filename))
 
     # return render_template("csimetrico.html")
 
