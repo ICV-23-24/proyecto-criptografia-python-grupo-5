@@ -60,10 +60,18 @@ def testingAsim():
             private_key = RSA.generate(1024)
             #Generating the public key (RsaKey object) from the private key
             public_key = private_key.publickey()
-            return render_template('testingAsim.html',private_key=private_key,public_key=public_key,mode=mode)
-        # Revisa si no se ha seleccionado ningún archivo
+            #Converting the RsaKey objects to string 
+            private_pem = private_key.export_key().decode()
+            public_pem = public_key.export_key().decode()
+            print(type(private_pem), type(public_pem))#Writing down the private and public keys to 'pem' files
+            with open('private_pem.pem', 'w') as pr:
+                pr.write(private_pem)
+            with open('public_pem.pem', 'w') as pu:
+                pu.write(public_pem)
+            return render_template('testingAsim.html',private_key=private_key,public_key=public_key,private_pem=private_pem,public_pem=public_pem,mode=mode)
         if mode == 'upload':
             file = request.files['file']
+            # Revisa si no se ha seleccionado ningún archivo
             if 'file' not in request.files:
                 flash('No file part')
                 return redirect(request.url)

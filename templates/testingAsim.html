@@ -36,6 +36,15 @@
     <p>{{ private_key }}</p>
 {% endif %}
 
+{% if public_pem %}
+    <h2>Clave Publica:</h2>
+    <p>{{ public_pem }}</p>
+{% endif %}
+
+{% if private_pem %}
+    <h2>Clave Privada:</h2>
+    <p>{{ private_pem }}</p>
+{% endif %}
 <!-- Encriptación mensaje -->
 
 <h2>Encriptar Mensaje</h2>
