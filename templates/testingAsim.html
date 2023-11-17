@@ -4,9 +4,10 @@
 {% endblock %}
 {% block content %}
 
-<!-- Importación y listado de claves/archivos -->
 
 <h1>Cifrado Asimétrico</h1>
+
+<!-- Importación y listado de claves/archivos -->
 
 <form method=post enctype=multipart/form-data>
     <input type=file name=file>
@@ -17,6 +18,21 @@
 <nav>
      <a href="{{ url_for('listar') }}">Listar</a>
 </nav>
+
+<form method="post">
+    <input type="hidden" name="mode" value="import">
+    <input type="submit" value="Importar">
+</form>
+
+{% if pu_key %}
+    <h2>Clave Publica Importada:</h2>
+    <p>{{ pu_key }}</p>
+{% endif %}
+
+{% if pr_key %}
+    <h2>Clave Privada Importada:</h2>
+    <p>{{ pr_key }}</p>
+{% endif %}
 
 <!-- Cifrado Asimétrico -->
 
@@ -37,12 +53,12 @@
 {% endif %}
 
 {% if public_pem %}
-    <h2>Clave Publica:</h2>
+    <h2>Clave Publica Pem:</h2>
     <p>{{ public_pem }}</p>
 {% endif %}
 
 {% if private_pem %}
-    <h2>Clave Privada:</h2>
+    <h2>Clave Privada Pem:</h2>
     <p>{{ private_pem }}</p>
 {% endif %}
 <!-- Encriptación mensaje -->
@@ -57,11 +73,10 @@
     <input type="submit" value="Encriptar">
 </form>
 
-<!-- 
 {% if encrypted_message %}
     <h2>Mensaje Encriptado:</h2>
     <p>{{ encrypted_message }}</p>
-{% endif %} -->
+{% endif %}
 
 <!-- Desencriptación me -->
 

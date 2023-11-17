@@ -9,6 +9,8 @@ from binascii import hexlify
 
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+#Mensaje a encriptar
+message = b'Public and Private keys encryption'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -41,34 +43,8 @@ def csimetrico():
 
 @app.route("/testingAsim", methods=['GET', 'POST'])
 def testingAsim():
-    # if request.method == 'POST':
-    #     # Revisa si no se ha seleccionado ningún archivo
-    #     if 'file' not in request.files:
-    #         flash('No file part')
-    #         return redirect(request.url)
-    #     file = request.files['file']
-    #     # Guarda el archivo en caso de que sea válido
-    #     if file and allowed_file(file.filename):
-    #         filename = secure_filename(file.filename)
-    #         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    #         # return redirect(url_for('download_file', name=filename))
-
     if request.method == 'POST':
         mode = request.form['mode']
-        if mode == 'generate':
-            #Generating private key (RsaKey object) of key length of 1024 bits
-            private_key = RSA.generate(1024)
-            #Generating the public key (RsaKey object) from the private key
-            public_key = private_key.publickey()
-            #Converting the RsaKey objects to string 
-            private_pem = private_key.export_key().decode()
-            public_pem = public_key.export_key().decode()
-            print(type(private_pem), type(public_pem))#Writing down the private and public keys to 'pem' files
-            with open('private_pem.pem', 'w') as pr:
-                pr.write(private_pem)
-            with open('public_pem.pem', 'w') as pu:
-                pu.write(public_pem)
-            return render_template('testingAsim.html',private_key=private_key,public_key=public_key,private_pem=private_pem,public_pem=public_pem,mode=mode)
         if mode == 'upload':
             file = request.files['file']
             # Revisa si no se ha seleccionado ningún archivo
@@ -80,6 +56,27 @@ def testingAsim():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
+        if mode == 'generate':
+            #Generating private key (RsaKey object) of key length of 1024 bits
+            private_key = RSA.generate(1024)
+            #Generating the public key (RsaKey object) from the private key
+            public_key = private_key.publickey()
+
+            #Converting the RsaKey objects to string 
+            private_pem = private_key.export_key().decode()
+            public_pem = public_key.export_key().decode()
+
+            #Writing down the private and public keys to 'pem' files
+            with open('private_pem.pem', 'w') as pr:
+                pr.write(private_pem)
+            with open('public_pem.pem', 'w') as pu:
+                pu.write(public_pem)
+
+            return render_template('testingAsim.html',private_key=private_key,public_key=public_key,private_pem=private_pem,public_pem=public_pem,mode=mode)
+        if mode == 'import':            #Importing keys from files, converting it into the RsaKey object   
+            pr_key = RSA.import_key(open('private_pem.pem', 'r').read())
+            pu_key = RSA.import_key(open('public_pem.pem', 'r').read())
+            return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
 
     # return render_template("csimetrico.html")
 
