@@ -63,24 +63,32 @@ def testingAsim():
             public_key = private_key.publickey()
 
             #Converting the RsaKey objects to string 
-            private_pem = private_key.export_key().decode()
-            public_pem = public_key.export_key().decode()
+            private_pem = private_key.exportKey().decode()
+            public_pem = public_key.exportKey().decode()
 
             #Writing down the private and public keys to 'pem' files
             with open('private_pem.pem', 'w') as pr:
                 pr.write(private_pem)
             with open('public_pem.pem', 'w') as pu:
                 pu.write(public_pem)
-
             return render_template('testingAsim.html',private_key=private_key,public_key=public_key,private_pem=private_pem,public_pem=public_pem,mode=mode)
-        if mode == 'import':            #Importing keys from files, converting it into the RsaKey object   
-            pr_key = RSA.import_key(open('private_pem.pem', 'r').read())
-            pu_key = RSA.import_key(open('public_pem.pem', 'r').read())
-            return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
-
-    # return render_template("csimetrico.html")
-
-
+        if mode == 'import':            
+            #Importing keys from files, converting it into the RsaKey object   
+            # pr_key = RSA.importKey(open('private_pem.pem', 'r').read())
+            # pu_key = RSA.importKey(open('public_pem.pem', 'r').read())
+            with open('private_pem.pem', 'r') as pr_key_pem:
+                pr_key = RSA.importKey(pr_key_pem.read())
+            f = open('public_pem.pem')
+            pu_key_pem = f.read()
+            pu_key = RSA.importKey(pu_key_pem)
+            # return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
+            return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pu_key_pem=pu_key_pem,mode=mode)
+        if mode == 'encrypt':
+            #Instantiating PKCS1_OAEP object with the public key for encryption
+            cipher = PKCS1_OAEP.new(key=pu_key)
+            #Encrypting the message with the PKCS1_OAEP object
+            cipher_text = cipher.encrypt(message)
+            return render_template('testingAsim.html',cipher_text=cipher_text,mode=mode)
     return render_template("testingAsim.html")
 
 @app.route("/casimetrico/")

@@ -24,14 +24,19 @@
     <input type="submit" value="Importar">
 </form>
 
+{% if pu_key_pem %}
+    <h2>Clave Publica Importada PEM:</h2>
+    <p>{{ pu_key_pem }}</p>
+{% endif %}
+
 {% if pu_key %}
     <h2>Clave Publica Importada:</h2>
     <p>{{ pu_key }}</p>
 {% endif %}
 
-{% if pr_key %}
+{% if pr_key_pem %}
     <h2>Clave Privada Importada:</h2>
-    <p>{{ pr_key }}</p>
+    <p>{{ pr_key_pem }}</p>
 {% endif %}
 
 <!-- Cifrado Asimétrico -->
@@ -73,9 +78,9 @@
     <input type="submit" value="Encriptar">
 </form>
 
-{% if encrypted_message %}
+{% if cipher_text %}
     <h2>Mensaje Encriptado:</h2>
-    <p>{{ encrypted_message }}</p>
+    <p>{{ cipher_text }}</p>
 {% endif %}
 
 <!-- Desencriptación me -->
