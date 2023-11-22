@@ -34,6 +34,8 @@ C. Simétrico
 
     {% if decrypted_message %}
         <h2>Mensaje:</h2>
+        <p>Descargar Mensaje Encriptado: <a href="[{url_for('download_file', filename=filename) }]">Descargar</a></p>
+    {%elif mode == 'decrypt'%}
         <p>{{ decrypted_message }}</p>
     {% endif %}
 {% endblock %}
