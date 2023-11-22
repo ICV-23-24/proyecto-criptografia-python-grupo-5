@@ -76,13 +76,19 @@ def testingAsim():
             #Importing keys from files, converting it into the RsaKey object   
             # pr_key = RSA.importKey(open('private_pem.pem', 'r').read())
             # pu_key = RSA.importKey(open('public_pem.pem', 'r').read())
-            with open('private_pem.pem', 'r') as pr_key_pem:
-                pr_key = RSA.importKey(pr_key_pem.read())
-            f = open('public_pem.pem')
-            pu_key_pem = f.read()
-            pu_key = RSA.importKey(pu_key_pem)
+            # with open('private_pem.pem', 'r') as pr_key_pem:
+            #     pr_key = RSA.importKey(pr_key_pem.read())
+
+            with open('private_pem.pem', 'r') as pr_pem:
+                pr_key_pem = pr_pem.read()
+                pr_key = RSA.importKey(pr_key_pem)
+
+            with open('public_pem.pem', 'r') as pu_pem:
+                pu_key_pem = pu_pem.read()
+                pu_key = RSA.importKey(pu_key_pem)
+                
             # return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
-            return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pu_key_pem=pu_key_pem,mode=mode)
+            return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pr_key=pr_key,pu_key_pem=pu_key_pem,mode=mode)
         if mode == 'encrypt':
             #Instantiating PKCS1_OAEP object with the public key for encryption
             cipher = PKCS1_OAEP.new(key=pu_key)

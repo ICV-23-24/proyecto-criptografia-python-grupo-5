@@ -35,8 +35,13 @@
 {% endif %}
 
 {% if pr_key_pem %}
-    <h2>Clave Privada Importada:</h2>
+    <h2>Clave Privada Importada PEM:</h2>
     <p>{{ pr_key_pem }}</p>
+{% endif %}
+
+{% if pr_key %}
+    <h2>Clave Privada Importada:</h2>
+    <p>{{ pr_key }}</p>
 {% endif %}
 
 <!-- Cifrado Asimétrico -->
