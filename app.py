@@ -81,20 +81,31 @@ def testingAsim():
 
             with open('private_pem.pem', 'r') as pr_pem:
                 pr_key_pem = pr_pem.read()
+                global pr_key
                 pr_key = RSA.importKey(pr_key_pem)
 
             with open('public_pem.pem', 'r') as pu_pem:
                 pu_key_pem = pu_pem.read()
+                global pu_key
                 pu_key = RSA.importKey(pu_key_pem)
                 
             # return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
             return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pr_key=pr_key,pu_key_pem=pu_key_pem,mode=mode)
         if mode == 'encrypt':
+            message =b'Bruh'
             #Instantiating PKCS1_OAEP object with the public key for encryption
-            cipher = PKCS1_OAEP.new(key=pu_key)
+            cipher = PKCS1_OAEP.new(pu_key)
             #Encrypting the message with the PKCS1_OAEP object
+            global cipher_text
             cipher_text = cipher.encrypt(message)
             return render_template('testingAsim.html',cipher_text=cipher_text,mode=mode)
+        
+        if mode == 'decrypt':
+            #Instantiating PKCS1_OAEP object with the public key for encryption
+            decipher = PKCS1_OAEP.new(pr_key)
+            #Encrypting the message with the PKCS1_OAEP object
+            decipher_text = decipher.decrypt(cipher_text)
+            return render_template('testingAsim.html',decipher_text=decipher_text,mode=mode)
     return render_template("testingAsim.html")
 
 @app.route("/casimetrico/")

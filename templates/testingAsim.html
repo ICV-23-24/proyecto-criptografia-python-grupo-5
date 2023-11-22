@@ -100,6 +100,11 @@
     <input type="submit" value="Desencriptar">
 </form>
 
+{% if decipher_text %}
+    <h2>Mensaje Encriptado:</h2>
+    <p>{{ decipher_text }}</p>
+{% endif %}
+
 <!-- {% if decrypted_message %}
     <h2>Mensaje:</h2>
     <p>{{ decrypted_message }}</p>
