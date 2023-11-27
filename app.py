@@ -70,9 +70,9 @@ def testingAsim():
             public_pem = public_key.exportKey().decode()
 
             #Writing down the private and public keys to 'pem' files
-            with open('private_pem.pem', 'w') as pr:
+            with open('uploads/private_pem.pem', 'w') as pr:
                 pr.write(private_pem)
-            with open('public_pem.pem', 'w') as pu:
+            with open('uploads/public_pem.pem', 'w') as pu:
                 pu.write(public_pem)
             return render_template('testingAsim.html',private_key=private_key,public_key=public_key,private_pem=private_pem,public_pem=public_pem,mode=mode)
         if mode == 'import':            
@@ -82,12 +82,12 @@ def testingAsim():
             # with open('private_pem.pem', 'r') as pr_key_pem:
             #     pr_key = RSA.importKey(pr_key_pem.read())
 
-            with open('private_pem.pem', 'r') as pr_pem:
+            with open('uploads/private_pem.pem', 'r') as pr_pem:
                 pr_key_pem = pr_pem.read()
                 global pr_key
                 pr_key = RSA.importKey(pr_key_pem)
 
-            with open('public_pem.pem', 'r') as pu_pem:
+            with open('uploads/public_pem.pem', 'r') as pu_pem:
                 pu_key_pem = pu_pem.read()
                 global pu_key
                 pu_key = RSA.importKey(pu_key_pem)

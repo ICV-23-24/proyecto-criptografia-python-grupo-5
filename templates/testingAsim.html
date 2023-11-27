@@ -47,9 +47,11 @@
     <p>{{ pr_key }}</p>
 {% endif %}
 
-{% if list_file %}
-    <p>{{ list_file }}</p>
-{% endif %}
+<!-- Listado -->
+
+{% for file in list_file %}
+    <p>{{ file }}</p>
+{% endfor %}
 
 <!-- Cifrado Asimétrico -->
 
