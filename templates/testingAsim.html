@@ -15,9 +15,12 @@
     <input type=submit value=Upload>
 </form>
 
-<nav>
-     <a href="{{ url_for('listar') }}">Listar</a>
-</nav>
+
+<form method="post">
+    <input type="hidden" name="mode" value="list">
+    <input type="submit" value="Listar">
+</form>
+
 
 <form method="post">
     <input type="hidden" name="mode" value="import">
@@ -42,6 +45,10 @@
 {% if pr_key %}
     <h2>Clave Privada Importada:</h2>
     <p>{{ pr_key }}</p>
+{% endif %}
+
+{% if list_file %}
+    <p>{{ list_file }}</p>
 {% endif %}
 
 <!-- Cifrado Asimétrico -->

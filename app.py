@@ -56,6 +56,9 @@ def testingAsim():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
+        if mode == 'list':
+            list_file = os.listdir(UPLOAD_FOLDER)
+            return render_template('testingAsim.html',list_file=list_file,mode=mode)
         if mode == 'generate':
             #Generating private key (RsaKey object) of key length of 1024 bits
             private_key = RSA.generate(1024)
@@ -143,12 +146,3 @@ def hello_there(name = None):
 @app.route("/api/data")
 def get_data():
     return app.send_static_file("data.json")
-
-@app.route("/listar/")
-def listar():
-    return os.listdir(UPLOAD_FOLDER)
-
-@app.route("/listar/<path:path>")
-def get_file(path):
-    """Download a file."""
-    return send_from_directory(UPLOAD_FOLDER, path, as_attachment=True)
