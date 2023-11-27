@@ -92,7 +92,10 @@ def testingAsim():
             # return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
             return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pr_key=pr_key,pu_key_pem=pu_key_pem,mode=mode)
         if mode == 'encrypt':
-            message =b'Bruh'
+            # pu_key = request.form['pu_key']
+            # pu_key = bytes(pu_key,'utf-8')
+            message = request.form['message']
+            message = bytes(message,'utf-8')
             #Instantiating PKCS1_OAEP object with the public key for encryption
             cipher = PKCS1_OAEP.new(pu_key)
             #Encrypting the message with the PKCS1_OAEP object
