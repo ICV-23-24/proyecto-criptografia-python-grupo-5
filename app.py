@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from binascii import hexlify
+import base64
 
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -104,14 +105,18 @@ def testingAsim():
             #Encrypting the message with the PKCS1_OAEP object
             global cipher_text
             cipher_text = cipher.encrypt(message)
-            return render_template('testingAsim.html',cipher_text=cipher_text,mode=mode)
+            cipher_text_b64 = base64.b64encode(cipher_text).decode('utf-8')
+            return render_template('testingAsim.html',cipher_text=cipher_text,cipher_text_b64=cipher_text_b64,mode=mode)
         
         if mode == 'decrypt':
+            encrypted_message_b64 = request.form['encrypted_message']
+            encrypted_message = base64.b64decode(encrypted_message_b64)
             #Instantiating PKCS1_OAEP object with the public key for encryption
             decipher = PKCS1_OAEP.new(pr_key)
             #Encrypting the message with the PKCS1_OAEP object
-            decipher_text = decipher.decrypt(cipher_text)
-            return render_template('testingAsim.html',decipher_text=decipher_text,mode=mode)
+            decipher_text = decipher.decrypt(encrypted_message)
+            # return render_template('testingAsim.html',encrypted_message=encrypted_message,decipher_text=decipher_text,mode=mode)
+            return render_template('testingAsim.html',encrypted_message=encrypted_message,encrypted_message_b64=encrypted_message_b64,decipher_text=decipher_text,mode=mode)
     return render_template("testingAsim.html")
 
 @app.route("/casimetrico/")

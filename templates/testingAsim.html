@@ -97,12 +97,17 @@
     <p>{{ cipher_text }}</p>
 {% endif %}
 
+{% if cipher_text_b64 %}
+    <h2>Mensaje Encriptado B64:</h2>
+    <p>{{ cipher_text_b64 }}</p>
+{% endif %}
+
 <!-- Desencriptación me -->
 
 <h2>Desencriptar Mensaje</h2>
 <form method="post">
     <label for="encrypted_message">Mensaje Encriptado:</label><br>
-    <input type="text" id="encrypted_message" name="message"><br><br>
+    <input type="text" id="encrypted_message" name="encrypted_message"><br><br>
     <label for="key_decrypt">Clave:</label><br>
     <input type="text" id="key_decrypt" name="key"><br><br>
     <input type="hidden" name="mode" value="decrypt">
@@ -110,13 +115,18 @@
 </form>
 
 {% if decipher_text %}
-    <h2>Mensaje Encriptado:</h2>
+    <h2>Mensaje Desencriptado:</h2>
     <p>{{ decipher_text }}</p>
 {% endif %}
 
-<!-- {% if decrypted_message %}
-    <h2>Mensaje:</h2>
-    <p>{{ decrypted_message }}</p>
-{% endif %} -->
+{% if encrypted_message %}
+    <h2>Mensaje Encriptado:</h2>
+    <p>{{ encrypted_message }}</p>
+{% endif %}
+
+{% if encrypted_message_b64 %}
+    <h2>Mensaje b64:</h2>
+    <p>{{ encrypted_message_b64 }}</p>
+{% endif %}
 
 {% endblock %}
