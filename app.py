@@ -11,7 +11,8 @@ import base64
 UPLOAD_FOLDER = './uploads/'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 #Mensaje a encriptar
-message = b'Public and Private keys encryption'
+list_file = os.listdir(UPLOAD_FOLDER)
+
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -58,7 +59,6 @@ def testingAsim():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
         if mode == 'list':
-            list_file = os.listdir(UPLOAD_FOLDER)
             return render_template('testingAsim.html',list_file=list_file,mode=mode)
         if mode == 'generate':
             #Generating private key (RsaKey object) of key length of 1024 bits
@@ -85,17 +85,22 @@ def testingAsim():
 
             with open('uploads/private_pem.pem', 'r') as pr_pem:
                 pr_key_pem = pr_pem.read()
-                global pr_key
+                # global pr_key
                 pr_key = RSA.importKey(pr_key_pem)
 
             with open('uploads/public_pem.pem', 'r') as pu_pem:
                 pu_key_pem = pu_pem.read()
-                global pu_key
+                # global pu_key
                 pu_key = RSA.importKey(pu_key_pem)
                 
             # return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
             return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pr_key=pr_key,pu_key_pem=pu_key_pem,mode=mode)
         if mode == 'encrypt':
+            selection = request.form['selection']
+            selection = UPLOAD_FOLDER+selection
+            with open(selection, 'r') as pu_pem:
+                pu_key_pem = pu_pem.read()
+                pu_key = RSA.importKey(pu_key_pem)
             # pu_key = request.form['pu_key']
             # pu_key = bytes(pu_key,'utf-8')
             message = request.form['message']
@@ -106,9 +111,14 @@ def testingAsim():
             global cipher_text
             cipher_text = cipher.encrypt(message)
             cipher_text_b64 = base64.b64encode(cipher_text).decode('utf-8')
-            return render_template('testingAsim.html',cipher_text=cipher_text,cipher_text_b64=cipher_text_b64,mode=mode)
+            return render_template('testingAsim.html',cipher_text=cipher_text,cipher_text_b64=cipher_text_b64,list_file=list_file,mode=mode)
         
         if mode == 'decrypt':
+            selection = request.form['selection']
+            selection = UPLOAD_FOLDER+selection
+            with open(selection, 'r') as pr_pem:
+                pr_key_pem = pr_pem.read()
+                pr_key = RSA.importKey(pr_key_pem)
             encrypted_message_b64 = request.form['encrypted_message']
             encrypted_message = base64.b64decode(encrypted_message_b64)
             #Instantiating PKCS1_OAEP object with the public key for encryption
@@ -117,7 +127,7 @@ def testingAsim():
             decipher_text = decipher.decrypt(encrypted_message)
             # return render_template('testingAsim.html',encrypted_message=encrypted_message,decipher_text=decipher_text,mode=mode)
             return render_template('testingAsim.html',encrypted_message=encrypted_message,encrypted_message_b64=encrypted_message_b64,decipher_text=decipher_text,mode=mode)
-    return render_template("testingAsim.html")
+    return render_template("testingAsim.html",list_file=list_file)
 
 @app.route("/casimetrico/")
 def casimetrico():

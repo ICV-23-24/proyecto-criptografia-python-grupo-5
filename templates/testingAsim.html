@@ -87,7 +87,12 @@
     <label for="message">Mensaje:</label><br>
     <input type="text" id="message" name="message"><br><br>
     <label for="key">Clave:</label><br>
-    <input type="text" id="key" name="pu_key"><br><br>
+    <!-- <input type="text" id="key" name="pu_key"><br><br> -->
+    <select id="key" name="selection" method="POST">
+        {% for file in list_file %}
+            <option value="{{file}}" SELECTED>{{file}}</option>"
+        {% endfor %}
+    </select><br><br>
     <input type="hidden" name="mode" value="encrypt">
     <input type="submit" value="Encriptar">
 </form>
@@ -109,7 +114,12 @@
     <label for="encrypted_message">Mensaje Encriptado:</label><br>
     <input type="text" id="encrypted_message" name="encrypted_message"><br><br>
     <label for="key_decrypt">Clave:</label><br>
-    <input type="text" id="key_decrypt" name="key"><br><br>
+    <!-- <input type="text" id="key_decrypt" name="key"><br><br> -->
+    <select id="key_decrypt" name="selection" method="POST">
+        {% for file in list_file %}
+            <option value="{{file}}" SELECTED>{{file}}</option>"
+        {% endfor %}
+    </select><br><br>
     <input type="hidden" name="mode" value="decrypt">
     <input type="submit" value="Desencriptar">
 </form>
