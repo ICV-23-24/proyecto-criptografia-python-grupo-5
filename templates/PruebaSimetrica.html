@@ -1,14 +1,17 @@
 {% extends "layout.html" %}
 {% block title %}
-C. Simétrico
+Prueba de C. Simétrico
 {% endblock %}
 {% block content %}
-<h1>Encriptar y desencriptar mensaje con AES</h1>
+<h1>Cifrado simetrico</h1>
 
     <h2>Encriptar Mensaje</h2>
-    <form method="">
 
+    <form method="post">
+        <input type="hidden" name="mode" value="list">
+        <input type="submit" value="Listar">
     </form>
+    
     <form method="post">
         <label for="message">Mensaje:</label><br>
         <input type="text" id="message" name="message"><br><br>
@@ -18,17 +21,16 @@ C. Simétrico
         <input type="submit" value="Encriptar">
     </form>
 
-    {% if encrypted_message %}
-    <h2>Mensaje Encriptado:</h2>
-    <p>
-        <p>{{ encrypted_message }}</p>
-    </p>
-    <!--Agrego un boton de descarga-->
-    <form method="post">
-        <input type="hidden" name="mode" value="encrypt">
-        <input type="submit" value="Descargar">
-    </form>
-    {%elif mode == 'decrypt'%}
+    {% if encrypted_message %}                               
+        <h2>Mensaje Encriptado:</h2>
+        <p>
+            <p>{{ encrypted_message }}</p>
+        </p>
+        <!--Agrego un enlace de descarga-->
+        <a href="{{url_for('dowland_result', result=result,mode=mode) }}" download="encriptado.gpg">
+            Descargar
+        </a>
+    {%elif mode == 'encrypt'%}
     {% endif %}
 
     <h2>Desencriptar Mensaje</h2>
@@ -43,12 +45,13 @@ C. Simétrico
 
     {% if decrypted_message %}
         <h2>Mensaje:</h2>
-        <p>{{ decrypted_message }}</p>
-        <!--Agrego un boton de descarga-->
-    <form method="post">
-        <input type="hidden" name="mode" value="decrypt">
-        <input type="submit" value="Descargar">
-    </form>
+        <p> 
+            <p>{{ decrypted_message }}</p>
+        </p>
+        <!--Agrego un enlace de descarga-->
+        <a href="{{url_for('dowland_result', result=result,mode=mode) }}" download="desencriptado.txt">
+            Descargar
+        </a>
     {%elif mode == 'decrypt'%}
     {% endif %}
 {% endblock %}
