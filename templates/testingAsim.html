@@ -57,7 +57,9 @@
 
 <h2>Generar Par de Claves</h2>
 <form method="post">
-    <input type="hidden" name="mode" value="generate">
+    <label for="key_name">Nombre que será asociado al par de claves:</label><br>
+    <input type="text" id="key_name" name="pem_name"><br><br>
+    <input type="hidden" name="mode" value="generate">    
     <input type="submit" value="Generar">
 </form>
 

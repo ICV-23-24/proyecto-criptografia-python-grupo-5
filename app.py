@@ -61,6 +61,7 @@ def testingAsim():
         if mode == 'list':
             return render_template('testingAsim.html',list_file=list_file,mode=mode)
         if mode == 'generate':
+            pem_name = request.form['pem_name']
             #Generating private key (RsaKey object) of key length of 1024 bits
             private_key = RSA.generate(1024)
             #Generating the public key (RsaKey object) from the private key
@@ -71,18 +72,16 @@ def testingAsim():
             public_pem = public_key.exportKey().decode()
 
             #Writing down the private and public keys to 'pem' files
-            with open('uploads/private_pem.pem', 'w') as pr:
+            public_pem_name = pem_name+'_public.pem'
+            private_pem_name = pem_name+'_private.pem'
+            
+            with open(UPLOAD_FOLDER+private_pem_name, 'w') as pr:
                 pr.write(private_pem)
-            with open('uploads/public_pem.pem', 'w') as pu:
+            with open(UPLOAD_FOLDER+public_pem_name, 'w') as pu:
                 pu.write(public_pem)
             return render_template('testingAsim.html',private_key=private_key,public_key=public_key,private_pem=private_pem,public_pem=public_pem,mode=mode)
         if mode == 'import':            
-            #Importing keys from files, converting it into the RsaKey object   
-            # pr_key = RSA.importKey(open('private_pem.pem', 'r').read())
-            # pu_key = RSA.importKey(open('public_pem.pem', 'r').read())
-            # with open('private_pem.pem', 'r') as pr_key_pem:
-            #     pr_key = RSA.importKey(pr_key_pem.read())
-
+            #Importing keys from pem files, converting it into the RsaKey object   
             with open('uploads/private_pem.pem', 'r') as pr_pem:
                 pr_key_pem = pr_pem.read()
                 # global pr_key

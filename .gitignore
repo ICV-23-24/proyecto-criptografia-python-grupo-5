@@ -161,5 +161,5 @@ cython_debug/
 
 # Claves cifrado asimétrico
 
-private_pem.pem
-public_pem.pem
+*.pem
+*.pem
