@@ -53,7 +53,7 @@
     <p>{{ file }}</p>
 {% endfor %}
 
-<!-- Cifrado Asimétrico -->
+<!-- Generar par de claves asimétricas -->
 
 <h2>Generar Par de Claves</h2>
 <form method="post">
@@ -82,6 +82,7 @@
     <h2>Clave Privada Pem:</h2>
     <p>{{ private_pem }}</p>
 {% endif %}
+
 <!-- Encriptación mensaje -->
 
 <h2>Encriptar Mensaje</h2>
@@ -109,19 +110,25 @@
     <p>{{ cipher_text_b64 }}</p>
 {% endif %}
 
-<!-- Desencriptación me -->
+{% if name_only %}
+    <h2>Nombre Only:</h2>
+    <p>{{ name_only }}</p>
+{% endif %}
+
+
+<!-- Desencriptación memsaje -->
 
 <h2>Desencriptar Mensaje</h2>
 <form method="post">
     <label for="encrypted_message">Mensaje Encriptado:</label><br>
     <input type="text" id="encrypted_message" name="encrypted_message"><br><br>
-    <label for="key_decrypt">Clave:</label><br>
-    <!-- <input type="text" id="key_decrypt" name="key"><br><br> -->
+    <!-- <label for="key_decrypt">Clave:</label><br>
+    <input type="text" id="key_decrypt" name="key"><br><br>
     <select id="key_decrypt" name="selection" method="POST">
         {% for file in list_file %}
             <option value="{{file}}" SELECTED>{{file}}</option>"
         {% endfor %}
-    </select><br><br>
+    </select><br><br> -->
     <input type="hidden" name="mode" value="decrypt">
     <input type="submit" value="Desencriptar">
 </form>

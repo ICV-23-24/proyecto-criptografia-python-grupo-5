@@ -5,7 +5,6 @@ import functions as f
 from werkzeug.utils import secure_filename
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
-from binascii import hexlify
 import base64
 
 UPLOAD_FOLDER = './uploads/'
@@ -16,7 +15,7 @@ list_file = os.listdir(UPLOAD_FOLDER)
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.secret_key = "super secret key"
+# app.secret_key = "super secret key"
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -95,9 +94,11 @@ def testingAsim():
             # return render_template('testingAsim.html',pu_key=pu_key,pr_key=pr_key,mode=mode)
             return render_template('testingAsim.html',pr_key_pem=pr_key_pem,pu_key=pu_key,pr_key=pr_key,pu_key_pem=pu_key_pem,mode=mode)
         if mode == 'encrypt':
+            # global selection
             selection = request.form['selection']
-            selection = UPLOAD_FOLDER+selection
-            with open(selection, 'r') as pu_pem:
+            global name_only
+            name_only = selection.split('_')[0]
+            with open(UPLOAD_FOLDER+selection, 'r') as pu_pem:
                 pu_key_pem = pu_pem.read()
                 pu_key = RSA.importKey(pu_key_pem)
             # pu_key = request.form['pu_key']
@@ -110,12 +111,13 @@ def testingAsim():
             global cipher_text
             cipher_text = cipher.encrypt(message)
             cipher_text_b64 = base64.b64encode(cipher_text).decode('utf-8')
-            return render_template('testingAsim.html',cipher_text=cipher_text,cipher_text_b64=cipher_text_b64,list_file=list_file,mode=mode)
+            return render_template('testingAsim.html',cipher_text=cipher_text,cipher_text_b64=cipher_text_b64,list_file=list_file,name_only=name_only,mode=mode)
         
         if mode == 'decrypt':
-            selection = request.form['selection']
-            selection = UPLOAD_FOLDER+selection
-            with open(selection, 'r') as pr_pem:
+            # selection = request.form['selection']
+            # selection = UPLOAD_FOLDER+selection
+            associated_private_key_name = name_only+'_private.pem'
+            with open(UPLOAD_FOLDER+associated_private_key_name, 'r') as pr_pem:
                 pr_key_pem = pr_pem.read()
                 pr_key = RSA.importKey(pr_key_pem)
             encrypted_message_b64 = request.form['encrypted_message']
