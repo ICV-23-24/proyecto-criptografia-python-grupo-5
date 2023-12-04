@@ -3,5 +3,25 @@
 Página Prueba
 {% endblock %}
 {% block content %}
-<span>Página de prueba</span>
+<h1>prueba</h1>
+<form method="post">
+    <input type="hidden" name="mode" value="listar">
+    <input type="submit" value="clavespublicas">
+</form>
+{% for file in carpetas %}
+    <p>{{ file.filename }}</p>
+    <form method="post">
+        <input type="hidden" name="mode" value="descargar">
+        <input type="hidden" name="filename" value="{{ file.filename }}">
+        <input type="submit" value="descargar">
+    </form>
+{% endfor %}
+<form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type="hidden" name="mode" value="subir">
+    <input type="submit" value="Upload">
+</form>
+{% for file in subir %}
+    <p>{{ file.subir}}</p>
+{% endfor %}
 {% endblock %}

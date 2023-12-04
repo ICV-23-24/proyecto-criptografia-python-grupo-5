@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request
 import functions as f
+from QuickStart import conexion,listarcarpetas1,subir1,descargar1
 
 app = Flask(__name__)
 
@@ -39,11 +40,25 @@ def about():
 def doc():
     return render_template("doc.html")
 
-@app.route("/otro/")
+@app.route("/otro/", methods=['GET', 'POST'])
 def otro():
-    return render_template("otro.html")
-
-
+    if request.method == 'POST':
+        mode = request.form['mode']
+        if mode == 'listar':
+            conec = conexion()
+            carpetas = listarcarpetas1(conec)
+            return render_template('otro.html', carpetas=carpetas,mode=mode)
+        if mode == 'subir':
+            conec = conexion()
+            file=request.files['file']
+            filename = file.filename
+            subir = subir1(conec,filename=filename)
+            return render_template('otro.html', subir=subir,mode=mode)
+        if mode == 'descargar':
+            conec = conexion()
+            descargar = descargar1(conec,file)
+            return render_template('otro.html', descargar=descargar,mode=mode)
+    return render_template('otro.html')
 
 @app.route("/hello/")
 @app.route("/hello/<name>")
