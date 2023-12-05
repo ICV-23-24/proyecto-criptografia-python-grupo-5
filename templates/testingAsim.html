@@ -49,7 +49,7 @@
 
 <!-- Listado -->
 
-{% for file in list_file %}
+{% for file in list_publickey %}
     <p>{{ file }}</p>
     <!-- <form method="post">
         <input type="hidden" name="mode" value="download">
@@ -98,7 +98,7 @@
     <label for="key">Clave:</label><br>
     <!-- <input type="text" id="key" name="pu_key"><br><br> -->
     <select id="key" name="selection" method="POST">
-        {% for file in list_file %}
+        {% for file in list_publickey %}
             <option value="{{file}}" SELECTED>{{file}}</option>"
         {% endfor %}
     </select><br><br>

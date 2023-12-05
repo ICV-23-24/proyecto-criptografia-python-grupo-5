@@ -1,3 +1,4 @@
+import fnmatch
 import os
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, send_file, send_from_directory
@@ -10,8 +11,9 @@ import base64
 UPLOAD_FOLDER = './uploads/'
 # ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 ALLOWED_EXTENSIONS = {'pem'}
-#Mensaje a encriptar
+
 list_file = os.listdir(UPLOAD_FOLDER)
+list_publickey = fnmatch.filter(list_file, '*_public.pem')
 
 
 app = Flask(__name__)
@@ -60,7 +62,7 @@ def testingAsim():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
         if mode == 'list':
-            return render_template('testingAsim.html',list_file=list_file,mode=mode)
+            return render_template('testingAsim.html',list_publickey=list_publickey,mode=mode)
         if mode == "download":
             # file = UPLOAD_FOLDER+request.form[{{ file }}]
             # return render_template('testingAsim.html',mode=mode)
@@ -138,7 +140,7 @@ def testingAsim():
             decipher_text = decipher.decrypt(encrypted_message)
             # return render_template('testingAsim.html',encrypted_message=encrypted_message,decipher_text=decipher_text,mode=mode)
             return render_template('testingAsim.html',encrypted_message=encrypted_message,encrypted_message_b64=encrypted_message_b64,decipher_text=decipher_text,mode=mode)
-    return render_template("testingAsim.html",list_file=list_file)
+    return render_template("testingAsim.html",list_publickey=list_publickey)
 
 @app.route("/casimetrico/")
 def casimetrico():
