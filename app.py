@@ -14,6 +14,7 @@ ALLOWED_EXTENSIONS = {'pem'}
 
 list_file = os.listdir(UPLOAD_FOLDER)
 list_publickey = fnmatch.filter(list_file, '*_public.pem')
+list_button = list_publickey
 
 
 app = Flask(__name__)
@@ -62,7 +63,7 @@ def testingAsim():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
         if mode == 'list':
-            return render_template('testingAsim.html',list_publickey=list_publickey,mode=mode)
+            return render_template('testingAsim.html',list_button=list_button,mode=mode)
         if mode == "download":
             # file = UPLOAD_FOLDER+request.form[{{ file }}]
             # return render_template('testingAsim.html',mode=mode)
