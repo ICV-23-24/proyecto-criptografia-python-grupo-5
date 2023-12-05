@@ -1,7 +1,80 @@
 {% extends "layout.html" %}
 {% block title %}
-C. Simétrico
+    Testing Asimetrico
 {% endblock %}
 {% block content %}
-<p>Funcionalidades de cifrado simétrico</p>
+
+
+<h1>Cifrado Asimétrico RSA</h1>
+
+<!-- Importación de claves/archivos -->
+
+<form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type="hidden" name="mode" value="upload">
+    <input type=submit value=Upload>
+</form><br>
+
+<!-- Listado y descarga de claves/archivos -->
+
+<form method="post">
+    <input type="hidden" name="mode" value="list">
+    <input type="submit" value="Listar">
+</form><br>
+
+{% for file in list_button %}
+    <!-- <p>{{ file }}</p> -->
+    <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
+{% endfor %}
+
+<!-- Generar par de claves asimétricas -->
+
+<h2>Generar Par de Claves</h2>
+<form method="post">
+    <label for="key_name">Nombre que será asociado al par de claves:</label><br>
+    <input type="text" id="key_name" name="pem_name"><br><br>
+    <input type="hidden" name="mode" value="generate">    
+    <input type="submit" value="Generar">
+</form>
+
+{% if private_key %}
+    <p>Su par de claves ha sido generado</p>
+{% endif %}
+
+<!-- Encriptación mensaje -->
+
+<h2>Encriptar Mensaje</h2>
+<form method="post">
+    <label for="message">Mensaje:</label><br>
+    <input type="text" id="message" name="message"><br><br>
+    <label for="key">Clave:</label><br>
+    <select id="key" name="selection" method="POST">
+        {% for file in list_publickey %}
+            <option value="{{file}}" SELECTED>{{file}}</option>"
+        {% endfor %}
+    </select><br><br>
+    <input type="hidden" name="mode" value="encrypt">
+    <input type="submit" value="Encriptar">
+</form>
+
+{% if cipher_text_b64 %}
+    <h2>Mensaje Encriptado:</h2>
+    <p>{{ cipher_text_b64 }}</p>
+{% endif %}
+
+<!-- Desencriptación mensaje -->
+
+<h2>Desencriptar Mensaje</h2>
+<form method="post">
+    <label for="encrypted_message">Mensaje Encriptado:</label><br>
+    <input type="text" id="encrypted_message" name="encrypted_message"><br><br>
+    <input type="hidden" name="mode" value="decrypt">
+    <input type="submit" value="Desencriptar">
+</form>
+
+{% if decipher_text %}
+    <h2>Mensaje Desencriptado:</h2>
+    <p>{{ decipher_text }}</p>
+{% endif %}
+
 {% endblock %}
