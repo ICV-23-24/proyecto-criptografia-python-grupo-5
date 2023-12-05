@@ -16,6 +16,7 @@ ALLOWED_EXTENSIONS = {'pem'}
 # Listado de archivos del directorio de almacenamiento de claves
 list_file = os.listdir(UPLOAD_FOLDER)
 list_publickey = fnmatch.filter(list_file, '*_public.pem')
+list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
 list_button = list_publickey
 
 app = Flask(__name__)
@@ -35,18 +36,29 @@ def home():
 @app.route("/csimetrico/", methods=['GET','POST'])
 def csimetrico():
     if request.method == 'POST':
-        message = request.form['message']
-        key = request.form['key']
         mode = request.form['mode']
-
         if mode == 'encrypt':
+            key = request.form['key']
+            message = request.form['message']
             encrypted_message = f.encrypt_message(message, key)
-            return render_template('csimetrico.html', encrypted_message=encrypted_message, mode=mode)
-        elif mode == 'decrypt':
-            decrypted_message = f.decrypt_message(message, key)
-            return render_template('csimetrico.html', decrypted_message=decrypted_message, mode=mode)
+            with open(UPLOAD_FOLDER+'mensaje_encriptado.txt.gpg', 'w') as encrypted:
+                encrypted.write(encrypted_message)
 
-    return render_template("csimetrico.html")
+            with open(UPLOAD_FOLDER+'clave_key.txt.gpg', 'w') as key_encrypted:
+                key_encrypted.write(key)
+
+            return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
+        elif mode == 'decrypt':
+            selection = request.form['selection']
+            key_select = request.form['key_select']
+            with open(UPLOAD_FOLDER+selection, 'r') as gpg_message_file:
+                gpg_message = gpg_message_file.read()
+            with open(UPLOAD_FOLDER+key_select, 'r') as gpg_key_file:
+                gpg_key = gpg_key_file.read()
+            decrypted_message = f.decrypt_message(gpg_message,gpg_key)
+            return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
+
+    return render_template("csimetrico.html",list_encryptedfile=list_encryptedfile)
 
 # Cifrado Asimétrico
 @app.route("/casimetrico", methods=['GET', 'POST'])

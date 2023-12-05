@@ -16,16 +16,27 @@ C. Simétrico
     </form>
 
     {% if encrypted_message %}
-        <h2>Mensaje Encriptado:</h2>
-        <p>{{ encrypted_message }}</p>
+        <!-- <h2>Mensaje Encriptado:</h2>
+        <p>{{ encrypted_message }}</p> -->
+        <p>El mensaje ha sido guardado en formato gpg</p>
     {% endif %}
 
     <h2>Desencriptar Mensaje</h2>
     <form method="post">
         <label for="encrypted_message">Mensaje Encriptado:</label><br>
-        <input type="text" id="encrypted_message" name="message"><br><br>
+        <!-- <input type="text" id="encrypted_message" name="message"><br><br> -->
+        <select id="encrypted_message" name="selection" method="POST">
+            {% for file in list_encryptedfile %}
+                <option value="{{file}}" SELECTED>{{file}}</option>"
+            {% endfor %}
+        </select><br><br>
         <label for="key_decrypt">Clave:</label><br>
-        <input type="text" id="key_decrypt" name="key"><br><br>
+        <!-- <input type="text" id="key_decrypt" name="key"><br><br> -->
+        <select id="key_decrypt" name="key_select" method="POST">
+            {% for file in list_encryptedfile %}
+                <option value="{{file}}" SELECTED>{{file}}</option>"
+            {% endfor %}
+        </select><br><br>
         <input type="hidden" name="mode" value="decrypt">
         <input type="submit" value="Desencriptar">
     </form>
