@@ -1,6 +1,6 @@
 import os
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, request, send_from_directory
+from flask import Flask, flash, redirect, render_template, request, send_file, send_from_directory
 import functions as f
 from werkzeug.utils import secure_filename
 from Crypto.Cipher import PKCS1_OAEP
@@ -8,7 +8,8 @@ from Crypto.PublicKey import RSA
 import base64
 
 UPLOAD_FOLDER = './uploads/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+# ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'pem'}
 #Mensaje a encriptar
 list_file = os.listdir(UPLOAD_FOLDER)
 
@@ -46,6 +47,7 @@ def csimetrico():
 def testingAsim():
     if request.method == 'POST':
         mode = request.form['mode']
+        # filedownload = request.form["{{ file }}"]
         if mode == 'upload':
             file = request.files['file']
             # Revisa si no se ha seleccionado ningún archivo
@@ -59,6 +61,14 @@ def testingAsim():
                 # return redirect(url_for('download_file', name=filename))
         if mode == 'list':
             return render_template('testingAsim.html',list_file=list_file,mode=mode)
+        if mode == "download":
+            # file = UPLOAD_FOLDER+request.form[{{ file }}]
+            # return render_template('testingAsim.html',mode=mode)
+            # return send_file(file=file,as_attachment=True)
+            # for file in list_file:
+            #     return send_file(UPLOAD_FOLDER+file)
+
+            return send_file(UPLOAD_FOLDER+"Jaja_private.pem")
         if mode == 'generate':
             pem_name = request.form['pem_name']
             #Generating private key (RsaKey object) of key length of 1024 bits
@@ -148,7 +158,6 @@ def otro():
     return render_template("otro.html")
 
 
-
 @app.route("/hello/")
 @app.route("/hello/<name>")
 def hello_there(name = None):
@@ -162,3 +171,9 @@ def hello_there(name = None):
 @app.route("/api/data")
 def get_data():
     return app.send_static_file("data.json")
+
+@app.route('/uploads/<path:file>', methods=['GET', 'POST'])
+def download(file):
+    uploads = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+    # return send_from_directory(directory=uploads,file=file, as_attachment=True)
+    return send_file(uploads+file)

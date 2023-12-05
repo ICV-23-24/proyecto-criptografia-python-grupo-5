@@ -51,6 +51,12 @@
 
 {% for file in list_file %}
     <p>{{ file }}</p>
+    <!-- <form method="post">
+        <input type="hidden" name="mode" value="download">
+        <input type="hidden" name="mode" value="download">
+        <input type="submit" value="{{ file }}">
+    </form> -->
+    <a href="{{ url_for('download', file=file) }}"> {{ file }}</a>
 {% endfor %}
 
 <!-- Generar par de claves asimétricas -->
