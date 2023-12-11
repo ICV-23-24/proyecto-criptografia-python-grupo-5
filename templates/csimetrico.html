@@ -9,9 +9,13 @@ C. Simétrico
     <form method="post">
         <label for="message">Mensaje:</label><br>
         <input type="text" id="message" name="message"><br><br>
+        <label for="message_name">Nombre del archivo del mensaje:</label><br>
+        <input type="text" id="message_name" name="message_name"><br><br>
         <label for="key">Clave:</label><br>
         <input type="text" id="key" name="key"><br><br>
-        <input type="hidden" name="mode" value="encrypt">
+        <label for="key_name">Nombre del archivo de la clave:</label><br>
+        <input type="text" id="key_name" name="key_name"><br><br>
+        <input type="hidden" name="mode" value="encrypt_aes">
         <input type="submit" value="Encriptar">
     </form>
 
@@ -19,8 +23,12 @@ C. Simétrico
     <form method="post">
         <label for="message">Mensaje:</label><br>
         <input type="text" id="message" name="message"><br><br>
+        <label for="message_name">Nombre del archivo del mensaje:</label><br>
+        <input type="text" id="message_name" name="message_name"><br><br>
         <label for="key">Clave (23 caracteres):</label><br>
         <input type="text" id="key" name="key"><br><br>
+        <label for="key_name">Nombre del archivo de la clave:</label><br>
+        <input type="text" id="key_name" name="key_name"><br><br>
         <input type="hidden" name="mode" value="encrypt_des3">
         <input type="submit" value="Encriptar">
     </form>

@@ -37,25 +37,33 @@ def home():
 def csimetrico():
     if request.method == 'POST':
         mode = request.form['mode']
-        if mode == 'encrypt':
+        if mode == 'encrypt_aes':
             key = request.form['key']
             message = request.form['message']
+            key_name = request.form['key_name']
+            message_name = request.form['message_name']
+            keyfile_name = key_name+'_key.txt.gpg'
+            messagefile_name = message_name+'_mensaje.txt.gpg'
             encrypted_message = f.encrypt_message_aes(message, key)
-            with open(UPLOAD_FOLDER+'mensaje_encriptado.txt.gpg', 'w') as encrypted:
+            with open(UPLOAD_FOLDER+messagefile_name, 'w') as encrypted:
                 encrypted.write(encrypted_message)
 
-            with open(UPLOAD_FOLDER+'clave_key.txt.gpg', 'w') as key_encrypted:
+            with open(UPLOAD_FOLDER+keyfile_name, 'w') as key_encrypted:
                 key_encrypted.write(key)
 
             return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
         if mode == 'encrypt_des3':
             key = request.form['key']
             message = request.form['message']
+            key_name = request.form['key_name']
+            message_name = request.form['message_name']
+            keyfile_name = key_name+'_key.txt.gpg'
+            messagefile_name = message_name+'_mensaje.txt.gpg'
             encrypted_message = f.encrypt_message_des3(message, key)
-            with open(UPLOAD_FOLDER+'mensaje_encriptado.txt.gpg', 'w') as encrypted:
+            with open(UPLOAD_FOLDER+messagefile_name, 'w') as encrypted:
                 encrypted.write(encrypted_message)
 
-            with open(UPLOAD_FOLDER+'clave_key.txt.gpg', 'w') as key_encrypted:
+            with open(UPLOAD_FOLDER+keyfile_name, 'w') as key_encrypted:
                 key_encrypted.write(key)
 
             return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)        
