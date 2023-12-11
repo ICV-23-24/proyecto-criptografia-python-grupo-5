@@ -42,12 +42,17 @@ def csimetrico():
             message = request.form['message']
             key_name = request.form['key_name']
             message_name = request.form['message_name']
+            # Asigna un nombre al archivo con la clave simétrica
             keyfile_name = key_name+'_key.txt.gpg'
+            # Asigna un nombre al archivo con el mensaje encriptado
             messagefile_name = message_name+'_mensaje.txt.gpg'
+            # Utiliza la función de encriptacion AES para encriptar el mensaje con la clave
             encrypted_message = f.encrypt_message_aes(message, key)
+
+            # Guarda el mensaje encriptado en un archivo
             with open(UPLOAD_FOLDER+messagefile_name, 'w') as encrypted:
                 encrypted.write(encrypted_message)
-
+            # Guarda la clave en un archivo
             with open(UPLOAD_FOLDER+keyfile_name, 'w') as key_encrypted:
                 key_encrypted.write(key)
 
@@ -57,32 +62,44 @@ def csimetrico():
             message = request.form['message']
             key_name = request.form['key_name']
             message_name = request.form['message_name']
+            # Asigna un nombre al archivo con la clave simétrica
             keyfile_name = key_name+'_key.txt.gpg'
+            # Asigna un nombre al archivo con el mensaje encriptado
             messagefile_name = message_name+'_mensaje.txt.gpg'
+            # Utiliza la función de encriptacion DES3 para encriptar el mensaje con la clave
             encrypted_message = f.encrypt_message_des3(message, key)
+
+            # Guarda el mensaje encriptado en un archivo
             with open(UPLOAD_FOLDER+messagefile_name, 'w') as encrypted:
                 encrypted.write(encrypted_message)
 
+            # Guarda la clave en un archivo
             with open(UPLOAD_FOLDER+keyfile_name, 'w') as key_encrypted:
                 key_encrypted.write(key)
 
             return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)        
-        elif mode == 'decrypt':
+        if mode == 'decrypt_aes':
             selection = request.form['selection']
             key_select = request.form['key_select']
+            # Abre el archivo con el mensaje seleccionado y lee el contenido
             with open(UPLOAD_FOLDER+selection, 'r') as gpg_message_file:
                 gpg_message = gpg_message_file.read()
+            # Abre el archivo con la clave seleccionado y lee el contenido
             with open(UPLOAD_FOLDER+key_select, 'r') as gpg_key_file:
                 gpg_key = gpg_key_file.read()
+            # Utiliza la función de desencriptado AES para descifrar el mensaje seleccionado con la clave seleccionada
             decrypted_message = f.decrypt_message_aes(gpg_message,gpg_key)
             return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
-        elif mode == 'decrypt_des3':
+        if mode == 'decrypt_des3':
             selection = request.form['selection']
             key_select = request.form['key_select']
+            # Abre el archivo con el mensaje seleccionado y lee el contenido
             with open(UPLOAD_FOLDER+selection, 'r') as gpg_message_file:
                 gpg_message = gpg_message_file.read()
+            # Abre el archivo con la clave seleccionado y lee el contenido
             with open(UPLOAD_FOLDER+key_select, 'r') as gpg_key_file:
                 gpg_key = gpg_key_file.read()
+            # Utiliza la función de desencriptado DES3 para descifrar el mensaje seleccionado con la clave seleccionada
             decrypted_message = f.decrypt_message_des3(gpg_message,gpg_key)
             return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
         
