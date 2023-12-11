@@ -56,6 +56,8 @@ def csimetrico():
             with open(UPLOAD_FOLDER+keyfile_name, 'w') as key_encrypted:
                 key_encrypted.write(key)
 
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
             return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
         if mode == 'encrypt_des3':
             key = request.form['key']
@@ -77,6 +79,8 @@ def csimetrico():
             with open(UPLOAD_FOLDER+keyfile_name, 'w') as key_encrypted:
                 key_encrypted.write(key)
 
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
             return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)        
         if mode == 'decrypt_aes':
             selection = request.form['selection']
@@ -89,6 +93,9 @@ def csimetrico():
                 gpg_key = gpg_key_file.read()
             # Utiliza la función de desencriptado AES para descifrar el mensaje seleccionado con la clave seleccionada
             decrypted_message = f.decrypt_message_aes(gpg_message,gpg_key)
+
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
             return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
         if mode == 'decrypt_des3':
             selection = request.form['selection']
@@ -101,8 +108,13 @@ def csimetrico():
                 gpg_key = gpg_key_file.read()
             # Utiliza la función de desencriptado DES3 para descifrar el mensaje seleccionado con la clave seleccionada
             decrypted_message = f.decrypt_message_des3(gpg_message,gpg_key)
+
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
             return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
         
+    list_file = os.listdir(UPLOAD_FOLDER)
+    list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
     return render_template("csimetrico.html",list_encryptedfile=list_encryptedfile)
 
 # Cifrado Asimétrico
