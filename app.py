@@ -52,8 +52,8 @@ def otro():
             return render_template('otro.html', carpetas=carpetas,mode=mode)
         if mode == 'subir':
             conec = conexion()
-            # file=request.files['file']
-            # filename = file.filename
+            file=request.files['file']
+            filename = file.filename
             subir = subir1(conec,filename=filename)
             return render_template('otro.html', subir=subir,mode=mode)
         if mode == 'descargar':
