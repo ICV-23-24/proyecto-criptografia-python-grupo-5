@@ -44,19 +44,24 @@ def doc():
 def otro():
     if request.method == 'POST':
         mode = request.form['mode']
+        # file=request.files['file']
+
         if mode == 'listar':
             conec = conexion()
             carpetas = listarcarpetas1(conec)
             return render_template('otro.html', carpetas=carpetas,mode=mode)
         if mode == 'subir':
             conec = conexion()
-            file=request.files['file']
-            filename = file.filename
+            # file=request.files['file']
+            # filename = file.filename
             subir = subir1(conec,filename=filename)
             return render_template('otro.html', subir=subir,mode=mode)
         if mode == 'descargar':
             conec = conexion()
-            descargar = descargar1(conec,file)
+            filename = request.form['filename']
+            # file=request.files['file']
+            # filename = file.filename
+            descargar = descargar1(conec,filename=filename)
             return render_template('otro.html', descargar=descargar,mode=mode)
     return render_template('otro.html')
 
