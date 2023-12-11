@@ -5,7 +5,7 @@ C. Simétrico
 {% block content %}
 <h1>Encriptar y desencriptar mensaje con AES</h1>
 
-    <h2>Encriptar Mensaje</h2>
+    <h2>Encriptar Mensaje AES</h2>
     <form method="post">
         <label for="message">Mensaje:</label><br>
         <input type="text" id="message" name="message"><br><br>
@@ -15,13 +15,23 @@ C. Simétrico
         <input type="submit" value="Encriptar">
     </form>
 
+    <h2>Encriptar Mensaje DES3</h2>
+    <form method="post">
+        <label for="message">Mensaje:</label><br>
+        <input type="text" id="message" name="message"><br><br>
+        <label for="key">Clave (23 caracteres):</label><br>
+        <input type="text" id="key" name="key"><br><br>
+        <input type="hidden" name="mode" value="encrypt_des3">
+        <input type="submit" value="Encriptar">
+    </form>
+
     {% if encrypted_message %}
         <!-- <h2>Mensaje Encriptado:</h2>
         <p>{{ encrypted_message }}</p> -->
         <p>El mensaje ha sido guardado en formato gpg</p>
-    {% endif %}
+    {% endif %} 
 
-    <h2>Desencriptar Mensaje</h2>
+    <h2>Desencriptar Mensaje AES</h2>
     <form method="post">
         <label for="encrypted_message">Mensaje Encriptado:</label><br>
         <!-- <input type="text" id="encrypted_message" name="message"><br><br> -->
@@ -41,6 +51,25 @@ C. Simétrico
         <input type="submit" value="Desencriptar">
     </form>
 
+    <h2>Desencriptar Mensaje DES3</h2>
+    <form method="post">
+        <label for="encrypted_message">Mensaje Encriptado:</label><br>
+        <!-- <input type="text" id="encrypted_message" name="message"><br><br> -->
+        <select id="encrypted_message" name="selection" method="POST">
+            {% for file in list_encryptedfile %}
+                <option value="{{file}}" SELECTED>{{file}}</option>"
+            {% endfor %}
+        </select><br><br>
+        <label for="key_decrypt">Clave:</label><br>
+        <!-- <input type="text" id="key_decrypt" name="key"><br><br> -->
+        <select id="key_decrypt" name="key_select" method="POST">
+            {% for file in list_encryptedfile %}
+                <option value="{{file}}" SELECTED>{{file}}</option>"
+            {% endfor %}
+        </select><br><br>
+        <input type="hidden" name="mode" value="decrypt_des3">
+        <input type="submit" value="Desencriptar">
+    </form>    
     {% if decrypted_message %}
         <h2>Mensaje:</h2>
         <p>{{ decrypted_message }}</p>
