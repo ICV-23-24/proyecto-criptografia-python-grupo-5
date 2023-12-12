@@ -47,6 +47,8 @@
 <form method="post">
     <label for="message">Mensaje:</label><br>
     <input type="text" id="message" name="message"><br><br>
+    <label for="message_name">Nombre del archivo del mensaje:</label><br>
+    <input type="text" id="message_name" name="message_name"><br><br>
     <label for="key">Clave:</label><br>
     <select id="key" name="selection" method="POST">
         {% for file in list_publickey %}
@@ -66,8 +68,12 @@
 
 <h2>Desencriptar Mensaje</h2>
 <form method="post">
-    <label for="encrypted_message">Mensaje Encriptado:</label><br>
-    <input type="text" id="encrypted_message" name="encrypted_message"><br><br>
+    <label for="selection_encrypted_message">Mensaje Encriptado:</label><br>
+    <select id="selection_encrypted_message" name="selection_encrypted_message" method="POST">
+        {% for file in list_asymmetric_message %}
+            <option value="{{file}}" SELECTED>{{file}}</option>"
+        {% endfor %}
+    </select><br><br>
     <input type="hidden" name="mode" value="decrypt">
     <input type="submit" value="Desencriptar">
 </form>
