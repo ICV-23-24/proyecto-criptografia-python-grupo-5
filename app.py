@@ -140,6 +140,9 @@ def casimetrico():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
         if mode == 'list':
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_publickey = fnmatch.filter(list_file, '*_public.pem')
+            list_button = list_publickey
             return render_template('casimetrico.html',list_button=list_button,list_publickey=list_publickey,mode=mode)
         if mode == 'generate':
             pem_name = request.form['pem_name']
@@ -158,6 +161,9 @@ def casimetrico():
                 pr.write(private_pem)
             with open(UPLOAD_FOLDER+public_pem_name, 'w') as pu:
                 pu.write(public_pem)
+
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_publickey = fnmatch.filter(list_file, '*_public.pem')
             return render_template('casimetrico.html',private_key=private_key,list_publickey=list_publickey,mode=mode)
         if mode == 'encrypt':
             selection = request.form['selection']
@@ -176,6 +182,9 @@ def casimetrico():
             cipher_text = cipher.encrypt(message)
             # Codifica el mensaje en B64
             cipher_text_b64 = base64.b64encode(cipher_text).decode('utf-8')
+
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_publickey = fnmatch.filter(list_file, '*_public.pem')
             return render_template('casimetrico.html',cipher_text_b64=cipher_text_b64,name_only=name_only,list_publickey=list_publickey,mode=mode)
         if mode == 'decrypt':
             # Recibe el nombre asociado a los archivos de claves
@@ -191,7 +200,13 @@ def casimetrico():
             decipher = PKCS1_OAEP.new(pr_key)
             # Descifra el mensaje
             decipher_text = decipher.decrypt(encrypted_message)
+
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_publickey = fnmatch.filter(list_file, '*_public.pem')
             return render_template('casimetrico.html',decipher_text=decipher_text,list_publickey=list_publickey,mode=mode)
+
+    list_file = os.listdir(UPLOAD_FOLDER)    
+    list_publickey = fnmatch.filter(list_file, '*_public.pem')
     return render_template("casimetrico.html",list_publickey=list_publickey)
 
 @app.route("/about/")
