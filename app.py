@@ -56,12 +56,18 @@ def csimetrico():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
-        if mode == 'list_sym':
+        if mode == 'list_symmetric_keys':
             list_file = os.listdir(UPLOAD_FOLDER)
             list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
             list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
             list_button_key = list_symmetric_key
-            return render_template('csimetrico.html',list_button_key=list_button_key,list_symmetric_key=list_symmetric_key,list_asymmetric_message=list_symmetric_message,mode=mode)
+            return render_template('csimetrico.html',list_button_key=list_button_key,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
+        if mode == 'list_symmetric_messages':
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+            list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
+            list_button_message = list_symmetric_message
+            return render_template('csimetrico.html',list_button_message=list_button_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
         if mode == 'encrypt_aes':
             key = request.form['key']
             message = request.form['message']
