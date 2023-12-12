@@ -4,23 +4,28 @@ Página Prueba
 {% endblock %}
 {% block content %}
 <h1>prueba</h1>
+<!-- Es un boton que se despliega y te muestra los ficheros de la carpeta -->
 <form method="post">
     <input type="hidden" name="mode" value="listar">
     <input type="submit" value="clavespublicas">
 </form>
+<!-- Aqui hacemos un bucle para mostrar los ficheros -->
 {% for file in carpetas %}
     <p>{{ file.filename }}</p>
     <form method="post">
         <input type="hidden" name="mode" value="descargar">
+        <!-- Cogemos los ficheros listados para poder descargarlos -->
         <input type="hidden" name="filename" value="{{ file.filename }}">
         <input type="submit" value="descargar">
     </form>
 {% endfor %}
+<!-- Recogemos el fichero que le pasamos  -->
 <form method=post enctype=multipart/form-data>
     <input type=file name=file>
     <input type="hidden" name="mode" value="subir">
     <input type="submit" value="Upload">
 </form>
+<!-- Aqui hacemos un bucle for para subir los ficheros que le pasamos por el form -->
 {% for file in subir %}
     <p>{{ file.subir}}</p>
 {% endfor %}

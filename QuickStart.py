@@ -13,11 +13,9 @@ def conexion ():
         assert conec.connect(server_ip, 2900)
         return conec
 
-
+# Trae los archivos de la carpeta del servidor
 def listarcarpetas1(conec):
         listar1 = conec.listPath("clavespublicas",'/')
-        # for f in listar1:
-        #     print (f.filename)
         return listar1
 
 def listarcarpetas2(conec):
@@ -26,13 +24,16 @@ def listarcarpetas2(conec):
             print(f.filename)
 
 def subir1(conec,filename):
+                # Aqui decimos donde va a cojer el archivo
                 with open('clavespublicas/'+filename,'rb') as data:
                         filename = '/' + filename
                         conec.storeFile("clavespublicas",filename,data)
                 return filename      
 
 def descargar1(conec,filename):
+                # Aqui es donde se va descargar el archivo que recojes del servidor
                 with open('clavespublicas/'+filename,'wb') as des:
+                        # Descargas el archivo indicado de la carpeta del servidor
                         conec.retrieveFile("clavespublicas",filename,des)
                 return filename
 

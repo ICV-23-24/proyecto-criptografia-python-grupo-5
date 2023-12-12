@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request
 import functions as f
+# Importar la funciones de conexion,listarcarpetas,subir y descargar del quickstart.py
 from QuickStart import conexion,listarcarpetas1,subir1,descargar1
 
 app = Flask(__name__)
@@ -44,23 +45,25 @@ def doc():
 def otro():
     if request.method == 'POST':
         mode = request.form['mode']
-        # file=request.files['file']
-
         if mode == 'listar':
+            # Aqui llamamos a la funcion de conexion y la de  listarcarpetas
             conec = conexion()
             carpetas = listarcarpetas1(conec)
             return render_template('otro.html', carpetas=carpetas,mode=mode)
         if mode == 'subir':
             conec = conexion()
+            # recoges el archivo
             file=request.files['file']
+            # recoges el nombre del archivo
             filename = file.filename
+            # aqui llamas a la funcion de subir el archivo
             subir = subir1(conec,filename=filename)
             return render_template('otro.html', subir=subir,mode=mode)
         if mode == 'descargar':
             conec = conexion()
+            # recoges el archivo
             filename = request.form['filename']
-            # file=request.files['file']
-            # filename = file.filename
+            # aqui llamas a la funcion de descargar el archivo
             descargar = descargar1(conec,filename=filename)
             return render_template('otro.html', descargar=descargar,mode=mode)
     return render_template('otro.html')
