@@ -193,7 +193,7 @@ def casimetrico():
             list_file = os.listdir(UPLOAD_FOLDER)
             list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
             list_publickey = fnmatch.filter(list_file, '*_public.pem')
-            return render_template('casimetrico.html',cipher_text_b64=cipher_text_b64,name_only=name_only,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+            return render_template('casimetrico.html',name_only=name_only,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
         if mode == 'decrypt':
             # Recibe el nombre asociado a los archivos de claves
             associated_private_key_name = name_only+'_private.pem'
