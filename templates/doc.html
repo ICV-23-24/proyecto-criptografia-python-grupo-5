@@ -1,10 +1,25 @@
 {% extends "layout.html" %}
 {% block title %}
-Documentación
+Documentación 
 {% endblock %}
 {% block content %}
 <p>Esta página contendrá la documentación para el buen uso de la aplicación web</p>
 <h1>Criptografia Simetrica</h1>
 <p><h3>Hecha por: Marco Sarango</h3></p>
-<p></p> 
+<p> La criptografía simétrica es un método de cifrado en el que tanto el proceso de cifrado como el de descifrado utilizan la misma clave secreta.</br> Esto significa que la misma clave se utiliza tanto para transformar el texto original en un formato cifrado (cifrado) como para revertir el proceso y volver al texto original (descifrado). La seguridad en la criptografía simétrica depende en gran medida de mantener la clave secreta segura y protegida.
+    <ol>
+        <h3>Ejemplos de Cifrado Simetrico</h3>
+        <li>AES(Advanced Encryption Standar): </br>
+            Es uno de los algoritmos de cifrado simetrico mas utilizados y aceptados a nivel mundial. Puede utilizar claves de 128, 192 o 256 bits y se utiliza en una variedad de aplicaciones, desde la proteccion de datos en transacciones financieras hasta la seguridad de comunicaciones en red.
+        </li>
+        <li>DES (Estandar de cifraso de datos):</br>
+            Auque ha sido ampliamente remplasado por AES  debido a su longitud de clave mas corta (56 bits), sigue siendo un ejemplo historico de cifrado simetrico. DES fue desarrollado en la decada de 1970 y utilizado como estandar del gobierno de los Estados Unidos hasta que fue remplazado por AES.
+        </li>
+        <li>BLOWFISH:</br>
+            Un algoritmo de cifrado simetrico diseñado para ser eficientey seguro. Aunque no se utiliza tanto como AES, Blowfish ha sido popular en ciertos contextos debido a su simplicidad y velocidad.
+        </li>
+    </ol>
+    En la criptografía simétrica, el desafío principal es la distribución segura de la clave entre las partes que necesitan comunicarse de manera segura. Si la clave se ve comprometida, la seguridad de todo el sistema está en riesgo. Esto ha llevado al desarrollo de protocolos específicos, como el intercambio seguro de claves, para abordar este problema.
+</p> 
+
 {% endblock %} 

@@ -13,6 +13,11 @@ ALLOWED_EXTENSIONS = {'txt','gpg', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = "super secret key"
+
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.list('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Replace the existing home function with the one below
 @app.route("/")
@@ -25,7 +30,10 @@ def csimetrico():
         message = request.form['message']
         key = request.form['key']
         mode = request.form['mode']
-
+        
+        if mode == 'list':
+            return render_template('csimetrico.html',list_file=list,mode=mode)
+        
         if mode == 'encrypt':
             encrypted_message = f.encrypt_message(message, key)
             #Guarda el archivo llamado encriptado.txt.gpg
