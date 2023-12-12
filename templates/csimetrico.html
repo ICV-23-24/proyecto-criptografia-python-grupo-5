@@ -1,9 +1,30 @@
 {% extends "layout.html" %}
 {% block title %}
-C. Simétrico
+    C. Simétrico
 {% endblock %}
 {% block content %}
-<h1>Encriptar y desencriptar mensaje con AES</h1>
+
+<h1>Cifrado Simétrico AES y DES3</h1>
+
+    <!-- Importación de claves/archivos -->
+
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type="hidden" name="mode" value="upload">
+        <input type=submit value=Upload>
+    </form><br>
+
+    <!-- Listado y descarga de claves/archivos -->
+
+    <form method="post">
+        <input type="hidden" name="mode" value="list_sym">
+        <input type="submit" value="Listar">
+    </form><br>
+
+    {% for file in list_button_key %}
+        <!-- <p>{{ file }}</p> -->
+        <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
+    {% endfor %}
 
     <h2>Encriptar Mensaje AES</h2>
     <form method="post">

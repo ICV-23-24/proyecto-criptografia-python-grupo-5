@@ -11,22 +11,29 @@ import base64
 # Directorio de almacenamiento de claves
 UPLOAD_FOLDER = './uploads/'
 # Extensiones permitidas para la subida de archivos
-ALLOWED_EXTENSIONS = {'pem'}
+symmetric_extension = {'gpg'}
+asymmetric_extension = {'pem'}
 
 # Listado de archivos del directorio de almacenamiento de claves
 list_file = os.listdir(UPLOAD_FOLDER)
 list_publickey = fnmatch.filter(list_file, '*_public.pem')
+list_button_publickey = list_publickey
 list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
 list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
-list_button = list_publickey
+list_button_key = list_symmetric_key
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Comprobación de validez de subida de archivo
-def allowed_file(filename):
+# Comprobación de validez de subida de archivo de cifrado asimétrico
+def allowed_file_asymmetric(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           filename.rsplit('.', 1)[1].lower() in asymmetric_extension
+
+# Comprobación de validez de subida de archivo simétrico
+def allowed_file_symmetric(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in symmetric_extension
 
 # Reemplaza la ruta raiz
 @app.route("/")
@@ -38,6 +45,23 @@ def home():
 def csimetrico():
     if request.method == 'POST':
         mode = request.form['mode']
+        if mode == 'upload':
+            file = request.files['file']
+            # Revisa si no se ha seleccionado ningún archivo
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            # Guarda el archivo en caso de que sea válido
+            if file and allowed_file_symmetric(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                # return redirect(url_for('download_file', name=filename))
+        if mode == 'list_sym':
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+            list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
+            list_button_key = list_symmetric_key
+            return render_template('csimetrico.html',list_button_key=list_button_key,list_symmetric_key=list_symmetric_key,list_asymmetric_message=list_symmetric_message,mode=mode)
         if mode == 'encrypt_aes':
             key = request.form['key']
             message = request.form['message']
@@ -135,7 +159,7 @@ def casimetrico():
                 flash('No file part')
                 return redirect(request.url)
             # Guarda el archivo en caso de que sea válido
-            if file and allowed_file(file.filename):
+            if file and allowed_file_asymmetric(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
@@ -143,8 +167,8 @@ def casimetrico():
             list_file = os.listdir(UPLOAD_FOLDER)
             list_publickey = fnmatch.filter(list_file, '*_public.pem')
             list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
-            list_button = list_publickey
-            return render_template('casimetrico.html',list_button=list_button,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+            list_button_publickey = list_publickey
+            return render_template('casimetrico.html',list_button_publickey=list_button_publickey,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
         if mode == 'generate':
             pem_name = request.form['pem_name']
             # Genera clave privada con algoritmo RSA con tamaño de 1024 bits
