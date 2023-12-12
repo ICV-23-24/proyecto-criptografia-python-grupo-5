@@ -16,7 +16,8 @@ ALLOWED_EXTENSIONS = {'pem'}
 # Listado de archivos del directorio de almacenamiento de claves
 list_file = os.listdir(UPLOAD_FOLDER)
 list_publickey = fnmatch.filter(list_file, '*_public.pem')
-list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
+list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+list_symmetric_message = fnmatch.filter(list_file, '*_mensaje.txt.gpg')
 list_button = list_publickey
 
 app = Flask(__name__)
@@ -57,8 +58,9 @@ def csimetrico():
                 key_encrypted.write(key)
 
             list_file = os.listdir(UPLOAD_FOLDER)
-            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
-            return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
+            list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+            list_symmetric_message = fnmatch.filter(list_file, '*_mensaje.txt.gpg')
+            return render_template('csimetrico.html', encrypted_message=encrypted_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
         if mode == 'encrypt_des3':
             key = request.form['key']
             message = request.form['message']
@@ -80,8 +82,9 @@ def csimetrico():
                 key_encrypted.write(key)
 
             list_file = os.listdir(UPLOAD_FOLDER)
-            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
-            return render_template('csimetrico.html', encrypted_message=encrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)        
+            list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+            list_symmetric_message = fnmatch.filter(list_file, '*_mensaje.txt.gpg')
+            return render_template('csimetrico.html', encrypted_message=encrypted_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)        
         if mode == 'decrypt_aes':
             selection = request.form['selection']
             key_select = request.form['key_select']
@@ -95,8 +98,9 @@ def csimetrico():
             decrypted_message = f.decrypt_message_aes(gpg_message,gpg_key)
 
             list_file = os.listdir(UPLOAD_FOLDER)
-            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
-            return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
+            list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+            list_symmetric_message = fnmatch.filter(list_file, '*_mensaje.txt.gpg')
+            return render_template('csimetrico.html', decrypted_message=decrypted_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
         if mode == 'decrypt_des3':
             selection = request.form['selection']
             key_select = request.form['key_select']
@@ -110,12 +114,14 @@ def csimetrico():
             decrypted_message = f.decrypt_message_des3(gpg_message,gpg_key)
 
             list_file = os.listdir(UPLOAD_FOLDER)
-            list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
-            return render_template('csimetrico.html', decrypted_message=decrypted_message,list_encryptedfile=list_encryptedfile,mode=mode)
+            list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+            list_symmetric_message = fnmatch.filter(list_file, '*_mensaje.txt.gpg')
+            return render_template('csimetrico.html', decrypted_message=decrypted_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
         
     list_file = os.listdir(UPLOAD_FOLDER)
-    list_encryptedfile = fnmatch.filter(list_file, '*.gpg')
-    return render_template("csimetrico.html",list_encryptedfile=list_encryptedfile)
+    list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
+    list_symmetric_message = fnmatch.filter(list_file, '*_mensaje.txt.gpg')
+    return render_template("csimetrico.html",list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message)
 
 # Cifrado Asimétrico
 @app.route("/casimetrico", methods=['GET', 'POST'])

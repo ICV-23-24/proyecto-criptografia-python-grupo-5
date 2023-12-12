@@ -44,14 +44,14 @@ C. Simétrico
         <label for="encrypted_message">Mensaje Encriptado:</label><br>
         <!-- <input type="text" id="encrypted_message" name="message"><br><br> -->
         <select id="encrypted_message" name="selection" method="POST">
-            {% for file in list_encryptedfile %}
+            {% for file in list_symmetric_message %}
                 <option value="{{file}}" SELECTED>{{file}}</option>"
             {% endfor %}
         </select><br><br>
         <label for="key_decrypt">Clave:</label><br>
         <!-- <input type="text" id="key_decrypt" name="key"><br><br> -->
         <select id="key_decrypt" name="key_select" method="POST">
-            {% for file in list_encryptedfile %}
+            {% for file in list_symmetric_key %}
                 <option value="{{file}}" SELECTED>{{file}}</option>"
             {% endfor %}
         </select><br><br>
@@ -64,14 +64,14 @@ C. Simétrico
         <label for="encrypted_message">Mensaje Encriptado:</label><br>
         <!-- <input type="text" id="encrypted_message" name="message"><br><br> -->
         <select id="encrypted_message" name="selection" method="POST">
-            {% for file in list_encryptedfile %}
+            {% for file in list_symmetric_message %}
                 <option value="{{file}}" SELECTED>{{file}}</option>"
             {% endfor %}
         </select><br><br>
         <label for="key_decrypt">Clave:</label><br>
         <!-- <input type="text" id="key_decrypt" name="key"><br><br> -->
         <select id="key_decrypt" name="key_select" method="POST">
-            {% for file in list_encryptedfile %}
+            {% for file in list_symmetric_key %}
                 <option value="{{file}}" SELECTED>{{file}}</option>"
             {% endfor %}
         </select><br><br>
