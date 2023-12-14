@@ -15,18 +15,29 @@
     <input type=submit value=Upload>
 </form><br>
 
-<!-- Listado y descarga de claves/archivos -->
+<!-- Listado y descarga de claves -->
 
 <form method="post">
-    <input type="hidden" name="mode" value="list">
-    <input type="submit" value="Listar">
+    <input type="hidden" name="mode" value="list_asymmetric_keys">
+    <input type="submit" value="Listar claves">
 </form><br>
 
-{% for file in list_button_publickey %}
-    <!-- <p>{{ file }}</p> -->
-    <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
+<!-- Listado y descarga de archivos -->
+
+<form method="post">
+    <input type="hidden" name="mode" value="list_asymmetric_messages">
+    <input type="submit" value="Listar mensajes">
+</form><br>
+
+{% for file in list_button_key %}
+<!-- <p>{{ file }}</p> -->
+<a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
 {% endfor %}
 
+{% for file in list_button_message %}
+<!-- <p>{{ file }}</p> -->
+<a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
+{% endfor %}
 <!-- Generar par de claves asimétricas -->
 
 <h2>Generar Par de Claves</h2>

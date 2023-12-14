@@ -17,6 +17,7 @@ asymmetric_extension = {'pem'}
 # Listado de archivos del directorio de almacenamiento de claves
 list_file = os.listdir(UPLOAD_FOLDER)
 list_publickey = fnmatch.filter(list_file, '*_public.pem')
+list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
 list_button_publickey = list_publickey
 list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
 list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
@@ -169,12 +170,18 @@ def casimetrico():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
-        if mode == 'list':
+        if mode == 'list_asymmetric_keys':
             list_file = os.listdir(UPLOAD_FOLDER)
             list_publickey = fnmatch.filter(list_file, '*_public.pem')
             list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
-            list_button_publickey = list_publickey
-            return render_template('casimetrico.html',list_button_publickey=list_button_publickey,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+            list_button_key = list_publickey
+            return render_template('casimetrico.html',list_button_key=list_button_key,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+        if mode == 'list_asymmetric_messages':
+            list_file = os.listdir(UPLOAD_FOLDER)
+            list_publickey = fnmatch.filter(list_file, '*_public.pem')
+            list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
+            list_button_message = list_asymmetric_message
+            return render_template('casimetrico.html',list_button_message=list_button_message,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
         if mode == 'generate':
             pem_name = request.form['pem_name']
             # Genera clave privada con algoritmo RSA con tamaño de 1024 bits
