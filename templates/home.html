@@ -3,10 +3,13 @@
 Inicio
 {% endblock %}
 {% block content %}
-<p>Proyecto de Criptografía</p>
-<nav>
-    <a href="{{ url_for('csimetrico') }}" class="navbar-item">C. Simétrico</a>
-    <a href="{{ url_for('casimetrico') }}" class="navbar-item">C. Asimétrico</a>
-    <a href="{{ url_for('doc') }}" class="navbar-item">Documentación</a>
+
+<h1 class="title">Proyecto de Criptografía</h1>
+
+<nav class="home-navbar">
+    <a href="{{ url_for('csimetrico') }}" class="home-navbar-item">C. Simétrico</a>
+    <a href="{{ url_for('casimetrico') }}" class="home-navbar-item">C. Asimétrico</a>
+    <a href="{{ url_for('doc') }}" class="home-navbar-item">Documentación</a>
 </nav>
+
 {% endblock %}
