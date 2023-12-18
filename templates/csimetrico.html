@@ -8,18 +8,21 @@
 
     <!-- Importación de claves/archivos -->
 
+    <p>Subir archivos a almacenamiento del servidor</p>
     <form method=post enctype=multipart/form-data>
         <input type=file name=file>
         <input type="hidden" name="mode" value="upload">
         <input type=submit value=Upload>
     </form><br>
 
+    <p>Subir clave simétrica a almacacenamiento remoto en servidor smb</p>
     <form method=post enctype=multipart/form-data>
         <input type=file name=file>
         <input type="hidden" name="mode" value="subirprivada">
         <input type=submit value=Upload>
     </form><br>
 
+    <p>Subir mensaje cifrado a almacenamiento remoto en servidor smb</p>
     <form method=post enctype=multipart/form-data>
         <input type=file name=file>
         <input type="hidden" name="mode" value="subirencriptado">
