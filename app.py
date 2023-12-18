@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.PublicKey import RSA
 import base64
+from functions import conexion,listarclaveprivada,subirclaveprivada,descargarclaveprivada,listarficherosencriptados,subirficherosencriptados,descargarficherosencriptados,listarclavespublicas,subirclavespublicas,descargarclavespublicas,listarficheros,subirficheros,descargarficheros
 
 # Directorio de almacenamiento de claves
 UPLOAD_FOLDER = './uploads/'
@@ -57,18 +58,54 @@ def csimetrico():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
+        if mode == 'subirprivada':
+            conec = conexion()
+            # recoges el archivo
+            file=request.files['file']
+            # recoges el nombre del archivo
+            filename = file.filename
+            # aqui llamas a la funcion de subir el archivo
+            subirprivada = subirclaveprivada(conec,filename=filename)
+            return render_template('csimetrico.html', subirprivada=subirprivada,mode=mode)
+        if mode == 'subirencriptado':
+            conec = conexion()
+            # recoges el archivo
+            file=request.files['file']
+            # recoges el nombre del archivo
+            filename = file.filename
+            # aqui llamas a la funcion de subir el archivo
+            subirencriptado = subirficherosencriptados(conec,filename=filename)
+            return render_template('csimetrico.html', subirencriptado=subirencriptado,mode=mode)
         if mode == 'list_symmetric_keys':
+            conec = conexion()
+            list_symmetric_key_samba = listarclaveprivada(conec)
             list_file = os.listdir(UPLOAD_FOLDER)
             list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
             list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
             list_button_key = list_symmetric_key
-            return render_template('csimetrico.html',list_button_key=list_button_key,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
+            return render_template('csimetrico.html',list_symmetric_key_samba=list_symmetric_key_samba,list_button_key=list_button_key,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
         if mode == 'list_symmetric_messages':
+            conec = conexion()
+            list_symmetric_message_samba = listarficherosencriptados(conec)
             list_file = os.listdir(UPLOAD_FOLDER)
             list_symmetric_key = fnmatch.filter(list_file, '*_key.txt.gpg')
             list_symmetric_message = fnmatch.filter(list_file, '*_symmetricmessage.txt.gpg')
             list_button_message = list_symmetric_message
-            return render_template('csimetrico.html',list_button_message=list_button_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
+            return render_template('csimetrico.html',list_symmetric_message_samba=list_symmetric_message_samba,list_button_message=list_button_message,list_symmetric_key=list_symmetric_key,list_symmetric_message=list_symmetric_message,mode=mode)
+        if mode == 'descargarprivada':
+            conec = conexion()
+            # recoges el archivo
+            filename = request.form['filename']
+            # aqui llamas a la funcion de descargar el archivo
+            descargarprivada = descargarclaveprivada(conec,filename=filename)
+            return render_template('csimetrico.html', descargarprivada=descargarprivada,mode=mode)
+        if mode == 'descargarencriptados':
+            conec = conexion()
+            # recoges el archivo
+            filename = request.form['filename']
+            # aqui llamas a la funcion de descargar el archivo
+            descargarencriptados = descargarficherosencriptados(conec,filename=filename)
+            return render_template('csimetrico.html', descargarencriptados=descargarencriptados,mode=mode)
         if mode == 'encrypt_aes':
             key = request.form['key']
             message = request.form['message']
@@ -171,17 +208,53 @@ def casimetrico():
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 # return redirect(url_for('download_file', name=filename))
         if mode == 'list_asymmetric_keys':
+            conec = conexion()
+            list_publickey_samba = listarclavespublicas(conec)
             list_file = os.listdir(UPLOAD_FOLDER)
             list_publickey = fnmatch.filter(list_file, '*_public.pem')
             list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
             list_button_key = list_publickey
-            return render_template('casimetrico.html',list_button_key=list_button_key,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+            return render_template('casimetrico.html',list_publickey_samba=list_publickey_samba,list_button_key=list_button_key,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
         if mode == 'list_asymmetric_messages':
+            conec = conexion()
+            list_asymmetric_message_samba = listarficheros(conec)
             list_file = os.listdir(UPLOAD_FOLDER)
             list_publickey = fnmatch.filter(list_file, '*_public.pem')
             list_asymmetric_message = fnmatch.filter(list_file, '*_asymmetricmessage.txt.gpg')
             list_button_message = list_asymmetric_message
-            return render_template('casimetrico.html',list_button_message=list_button_message,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+            return render_template('casimetrico.html',list_asymmetric_message_samba=list_asymmetric_message_samba,list_button_message=list_button_message,list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message,mode=mode)
+        if mode == 'descargarpublica':
+            conec = conexion()
+            # recoges el archivo
+            filename = request.form['filename']
+            # aqui llamas a la funcion de descargar el archivo
+            descargarpublica = descargarclavespublicas(conec,filename=filename)
+            return render_template('casimetrico.html', descargarpublica=descargarpublica,mode=mode)
+        if mode == 'descargarfichero':
+            conec = conexion()
+            # recoges el archivo
+            filename = request.form['filename']
+            # aqui llamas a la funcion de descargar el archivo
+            descargarfichero = descargarficheros(conec,filename=filename)
+            return render_template('casimetrico.html', descargarfichero=descargarfichero,mode=mode)
+        if mode == 'subirpublica':
+            conec = conexion()
+            # recoges el archivo
+            file=request.files['file']
+            # recoges el nombre del archivo
+            filename = file.filename
+            # aqui llamas a la funcion de subir el archivo
+            subirpublica = subirclavespublicas(conec,filename=filename)
+            return render_template('casimetrico.html', subirpublica=subirpublica,mode=mode)
+        if mode == 'subirfichero':
+            conec = conexion()
+            # recoges el archivo
+            file=request.files['file']
+            # recoges el nombre del archivo
+            filename = file.filename
+            # aqui llamas a la funcion de subir el archivo
+            subirfichero = subirficheros(conec,filename=filename)
+            return render_template('casimetrico.html', subirfichero=subirfichero,mode=mode)
         if mode == 'generate':
             pem_name = request.form['pem_name']
             # Genera clave privada con algoritmo RSA con tamaño de 1024 bits
