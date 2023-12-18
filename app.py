@@ -331,14 +331,6 @@ def casimetrico():
     list_publickey = fnmatch.filter(list_file, '*_public.pem')
     return render_template("casimetrico.html",list_publickey=list_publickey,list_asymmetric_message=list_asymmetric_message)
 
-@app.route("/about/")
-def about():
-    return render_template("about.html")
-
-@app.route("/doc/")
-def doc():
-    return render_template("doc.html")
-
 @app.route("/api/data")
 def get_data():
     return app.send_static_file("data.json")
