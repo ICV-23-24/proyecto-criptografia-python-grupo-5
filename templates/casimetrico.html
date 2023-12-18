@@ -15,6 +15,18 @@
     <input type=submit value=Upload>
 </form><br>
 
+<form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type="hidden" name="mode" value="subirpublica">
+    <input type=submit value=Upload>
+</form><br>
+
+<form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type="hidden" name="mode" value="subirfichero">
+    <input type=submit value=Upload>
+</form><br>
+
 <!-- Listado y descarga de claves -->
 
 <form method="post">
@@ -34,9 +46,29 @@
 <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
 {% endfor %}
 
+{% for file in list_publickey_samba %}
+<p>{{ file.filename }}</p>
+<form method="post">
+    <input type="hidden" name="mode" value="descargarpublica">
+    <!-- Cogemos los ficheros listados para poder descargarlos -->
+    <input type="hidden" name="filename" value="{{ file.filename }}">
+    <input type="submit" value="descargar">
+</form>
+{% endfor %}
+
 {% for file in list_button_message %}
 <!-- <p>{{ file }}</p> -->
 <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
+{% endfor %}
+
+{% for file in list_asymmetric_message_samba %}
+<p>{{ file.filename }}</p>
+<form method="post">
+    <input type="hidden" name="mode" value="descargarfichero">
+    <!-- Cogemos los ficheros listados para poder descargarlos -->
+    <input type="hidden" name="filename" value="{{ file.filename }}">
+    <input type="submit" value="descargar">
+</form>
 {% endfor %}
 <!-- Generar par de claves asimétricas -->
 

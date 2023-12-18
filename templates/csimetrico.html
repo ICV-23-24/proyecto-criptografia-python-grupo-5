@@ -14,6 +14,18 @@
         <input type=submit value=Upload>
     </form><br>
 
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type="hidden" name="mode" value="subirprivada">
+        <input type=submit value=Upload>
+    </form><br>
+
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type="hidden" name="mode" value="subirencriptado">
+        <input type=submit value=Upload>
+    </form><br>
+
     <!-- Listado y descarga de claves -->
 
     <form method="post">
@@ -33,9 +45,29 @@
         <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
     {% endfor %}
 
+    {% for file in list_symmetric_key_samba %}
+    <p>{{ file.filename }}</p>
+    <form method="post">
+        <input type="hidden" name="mode" value="descargarprivada">
+        <!-- Cogemos los ficheros listados para poder descargarlos -->
+        <input type="hidden" name="filename" value="{{ file.filename }}">
+        <input type="submit" value="descargar">
+    </form>
+    {% endfor %}
+
     {% for file in list_button_message %}
     <!-- <p>{{ file }}</p> -->
     <a href="{{ url_for('download', file=file) }}"> {{ file }}</a><br><br>
+    {% endfor %}
+
+    {% for file in list_symmetric_message_samba %}
+    <p>{{ file.filename }}</p>
+    <form method="post">
+        <input type="hidden" name="mode" value="descargarencriptados">
+        <!-- Cogemos los ficheros listados para poder descargarlos -->
+        <input type="hidden" name="filename" value="{{ file.filename }}">
+        <input type="submit" value="descargar">
+    </form>
     {% endfor %}
 
     <h2>Encriptar Mensaje AES</h2>
